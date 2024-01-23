@@ -1,0 +1,139 @@
+{
+	"$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+	"blocks": [
+		{
+			"alignment": "left",
+			"segments": [
+				{
+					"foreground": "#ac88ff",
+					"style": "powerline",
+					"template": "{{ if .WSL }}WSL at {{ end }}{{.Icon}}",
+					"type": "os"
+				},
+				{
+					"foreground": "#ac88ff",
+					"properties": {
+						"style": "full"
+					},
+					"style": "plain",
+					"template": " {{ .Path }} ",
+					"type": "path"
+				},
+				{
+					"foreground": "#f07056",
+					"properties": {
+						"fetch_stash_count": true,
+						"fetch_status": true,
+						"fetch_upstream_icon": true
+					},
+					"style": "plain",
+					"template": "\uf09b {{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }} ",
+					"type": "git"
+				}
+			],
+			"type": "prompt"
+		},
+		{
+			"alignment": "right",
+			"segments": [
+				{
+					"foreground": "red",
+					"style": "plain",
+					"template": "| root ",
+					"type": "root"
+				},
+				{
+					"type": "dotnet",
+					"style": "powerline",
+					"foreground": "#6495ed",
+					"template": " \uE77F {{ .Full }} "
+				},
+				{
+					"type": "angular",
+					"style": "powerline",
+					"foreground": "#ffffff",
+					"template": " \uE753 {{ if .Error }}<#FE4A49>?</>{{ else }}{{ .Full }}{{ end }} "
+				},
+				{
+					"type": "npm",
+					"style": "powerline",
+					"foreground": "#FE4A49",
+					"template": "\ue71e {{ .Full }} "
+				},
+				{
+					"foreground": "#06A4CE",
+					"style": "powerline",
+					"template": "| \ue798 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
+					"type": "dart"
+				},
+				{
+					"foreground": "#6CA35E",
+					"style": "powerline",
+					"template": "| \ue718 {{ if .PackageManagerIcon }}{{ .PackageManagerIcon }} {{ end }}{{ .Full }} ",
+					"type": "node"
+				},
+				{
+					"foreground": "#4584b6",
+					"properties": {
+						"display_mode": "context",
+						"fetch_virtual_env": true
+					},
+					"style": "plain",
+					"template": "| \ue235 {{ .Venv }} ",
+					"type": "python"
+				},
+				{
+					"foreground_templates": [
+						"{{if eq \"Charging\" .State.String}}#4caf50{{end}}",
+						"{{if eq \"Discharging\" .State.String}}#40c4ff{{end}}",
+						"{{if eq \"Full\" .State.String}}#ff0000{{end}}"
+					],
+					"invert_powerline": true,
+					"properties": {
+						"charged_icon": "\uf00d ",
+						"charging_icon": "\ue234 ",
+						"discharging_icon": "\uf242 "
+					},
+					"style": "powerline",
+					"template": " {{ if not .Error }}{{ .Icon }}{{ .Percentage }}{{ end }}{{ .Error }} \uf295 ",
+					"type": "battery"
+				},
+				{
+					"foreground": "#ff86f1",
+					"style": "plain",
+					"template": " \uf017 {{ .CurrentDate | date .Format }} ",
+					"type": "time"
+				},
+				{
+					"foreground": "#5af9ce",
+					"properties": {
+						"style": "dallas",
+						"threshold": 0
+					},
+					"style": "plain",
+					"template": " \uf250 {{ .FormattedMs }}s ",
+					"type": "executiontime"
+				}
+			],
+			"type": "prompt"
+		},
+		{
+			"alignment": "left",
+			"newline": true,
+			"segments": [
+				{
+					"foreground": "#ff86f1",
+					"foreground_templates": ["{{ if gt .Code 0 }}red{{ end }}"],
+					"properties": {
+						"always_enabled": true
+					},
+					"style": "powerline",
+					"template": "\u279c ",
+					"type": "status"
+				}
+			],
+			"type": "prompt"
+		}
+	],
+	"version": 2
+}
