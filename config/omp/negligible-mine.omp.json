@@ -20,6 +20,12 @@
 					"type": "path"
 				},
 				{
+					"type": "project",
+					"style": "powerline",
+					"foreground": "#cc42d3",
+					"template": " {{ if .Error }}{{ .Error }}{{ else }}{{if or .Name .Version}} {{end}}{{ if .Name }}{{ .Name }}{{ if .Version }}@{{.Version}}{{ end }}{{ end }}{{ end }} "
+				},
+				{
 					"foreground": "#f07056",
 					"properties": {
 						"fetch_stash_count": true,
@@ -43,10 +49,22 @@
 					"type": "root"
 				},
 				{
+					"type": "aws",
+					"style": "powerline",
+					"foreground": "#ed8b64",
+					"template": "   {{.Profile}}{{if .Region}}@{{.Region}}{{end}} "
+				},
+				{
+					"type": "docker",
+					"style": "powerline",
+					"foreground": "#6495ed",
+					"template": " \uf308 {{ .Context }} "
+				},
+				{
 					"type": "dotnet",
 					"style": "powerline",
 					"foreground": "#6495ed",
-					"template": " \uE77F {{ .Full }} "
+					"template": " \ue72e {{ .Full }} "
 				},
 				{
 					"type": "angular",
@@ -59,12 +77,6 @@
 					"style": "powerline",
 					"foreground": "#FE4A49",
 					"template": "\ue71e {{ .Full }} "
-				},
-				{
-					"foreground": "#06A4CE",
-					"style": "powerline",
-					"template": "| \ue798 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
-					"type": "dart"
 				},
 				{
 					"foreground": "#6CA35E",
