@@ -54,12 +54,12 @@
 					"foreground": "#ed8b64",
 					"template": "   {{.Profile}}{{if .Region}}@{{.Region}}{{end}} "
 				},
-				{
-					"type": "docker",
-					"style": "powerline",
-					"foreground": "#6495ed",
-					"template": " \uf308 {{ .Context }} "
-				},
+				// {
+				// 	"type": "docker",
+				// 	"style": "powerline",
+				// 	"foreground": "#6495ed",
+				// 	"template": " \uf308 {{ .Context }} "
+				// },
 				{
 					"type": "dotnet",
 					"style": "powerline",
