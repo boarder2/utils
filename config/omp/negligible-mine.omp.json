@@ -111,6 +111,12 @@
 					"type": "battery"
 				},
 				{
+					"foreground": "#7d7bf7",
+					"style": "diamond",
+					"template": "  {{round .PhysicalPercentUsed 0}}% ",
+					"type": "sysinfo"
+				},
+				{
 					"foreground": "#ff86f1",
 					"style": "plain",
 					"template": " \uf017 {{ .CurrentDate | date .Format }} ",
