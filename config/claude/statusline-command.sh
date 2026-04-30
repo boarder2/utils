@@ -120,6 +120,57 @@ if [ -n "$cwd" ]; then
   dir_seg="${mauve}${icon_folder} ${cwd_disp}${reset}"
 fi
 
+# ── rate limit segment ────────────────────────────────────────────────────────
+rate_seg=""
+five_h=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+seven_d=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+
+if [ -n "$five_h" ] || [ -n "$seven_d" ]; then
+  rate_parts=()
+  
+  # 5-hour limit with block bar
+  if [ -n "$five_h" ]; then
+    five_h_int=$(printf '%.0f' "$five_h")
+    if [ "$five_h_int" -lt 65 ]; then
+      bar_color="$green"
+    elif [ "$five_h_int" -le 75 ]; then
+      bar_color="$yellow"
+    else
+      bar_color="$red"
+    fi
+    
+    eighths=$(( five_h_int * 80 / 100 ))
+    [ "$eighths" -gt 80 ] && eighths=80
+    full_cells=$(( eighths / 8 ))
+    remainder=$(( eighths % 8 ))
+    empty_cells=$(( 10 - full_cells - (remainder > 0 ? 1 : 0) ))
+    
+    bar=""
+    for _ in $(seq 1 "$full_cells"); do bar="${bar}█"; done
+    if [ "$remainder" -gt 0 ]; then
+      bar="${bar}${blocks[$remainder]}"
+    fi
+    for _ in $(seq 1 "$empty_cells"); do bar="${bar} "; done
+    
+    rate_parts+=("${bar_color}5h: ${bar} ${five_h_int}%${reset}")
+  fi
+  
+  # 7-day limit (percent only)
+  if [ -n "$seven_d" ]; then
+    seven_d_int=$(printf '%.0f' "$seven_d")
+    if [ "$seven_d_int" -lt 65 ]; then
+      rate_color="$green"
+    elif [ "$seven_d_int" -le 75 ]; then
+      rate_color="$yellow"
+    else
+      rate_color="$red"
+    fi
+    rate_parts+=("${rate_color}7d: ${seven_d_int}%${reset}")
+  fi
+  
+  rate_seg="${dim}⚡${reset} $(IFS=' '; echo "${rate_parts[*]}")"
+fi
+
 # ── cost segment ───────────────────────────────────────────────────────────────
 cost_seg=""
 cost=$(echo "$input" | jq -r '.cost.total_cost_usd // empty')
@@ -132,9 +183,10 @@ fi
 parts=()
 [ -n "$model_seg" ] && parts+=("$model_seg")
 [ -n "$ctx_seg" ]   && parts+=("$ctx_seg")
-[ -n "$token_seg" ] && parts+=("$token_seg")
+#[ -n "$token_seg" ] && parts+=("$token_seg")
 [ -n "$git_seg" ]   && parts+=("$git_seg")
 [ -n "$dir_seg" ]   && parts+=("$dir_seg")
+[ -n "$rate_seg" ]  && parts+=("$rate_seg")
 [ -n "$cost_seg" ]  && parts+=("$cost_seg")
 
 out=""
