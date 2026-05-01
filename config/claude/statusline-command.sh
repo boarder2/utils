@@ -66,11 +66,11 @@ if [ -n "$used" ]; then
   empty_cells=$(( 10 - full_cells - (remainder > 0 ? 1 : 0) ))
 
   bar=""
-  for _ in $(seq 1 "$full_cells"); do bar="${bar}█"; done
+  for (( i=0; i<full_cells; i++ )); do bar="${bar}█"; done
   if [ "$remainder" -gt 0 ]; then
     bar="${bar}${blocks[$remainder]}"
   fi
-  for _ in $(seq 1 "$empty_cells"); do bar="${bar} "; done
+  for (( i=0; i<empty_cells; i++ )); do bar="${bar} "; done
 
   ctx_seg="${bar_color}${icon_chart} ${bar} ${used_int}%${reset}"
 fi
@@ -146,11 +146,11 @@ if [ -n "$five_h" ] || [ -n "$seven_d" ]; then
     empty_cells=$(( 10 - full_cells - (remainder > 0 ? 1 : 0) ))
     
     bar=""
-    for _ in $(seq 1 "$full_cells"); do bar="${bar}█"; done
+    for (( i=0; i<full_cells; i++ )); do bar="${bar}█"; done
     if [ "$remainder" -gt 0 ]; then
       bar="${bar}${blocks[$remainder]}"
     fi
-    for _ in $(seq 1 "$empty_cells"); do bar="${bar} "; done
+    for (( i=0; i<empty_cells; i++ )); do bar="${bar} "; done
     
     rate_parts+=("${bar_color}5h: ${bar} ${five_h_int}%${reset}")
   fi
