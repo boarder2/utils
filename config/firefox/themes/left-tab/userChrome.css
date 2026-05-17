@@ -1,20 +1,32 @@
 .tabbrowser-tab .tab-close-button {
 	opacity: 0;
-	margin-left: -4.5px !important;
-	margin-right: 2px !important;
+	margin-left: 0px !important;
+	margin-right: 4px !important;
+	transition: opacity 0.15s ease;
 }
+
 .tabbrowser-tab:not(:hover) .tab-close-button {
 	display: none;
 }
+
 .tabbrowser-tab:not([pinned="true"]):hover .tab-close-button {
 	opacity: 1;
 	margin-inline-end: 0;
 	order: -1 !important;
 	display: unset !important;
 }
-.tabbrowser-tab:not([pinned="true"]):hover .tab-icon-stack {
-	-moz-box-ordinal-group: 99999 !important;
+
+#tabbrowser-tabs[orient="vertical"] {
+&[expanded] {
+	& .tabbrowser-tab:not([pinned="true"]):hover .tab-icon-stack:not([indicator-replaces-favicon]) {
+		display: none;
+	}
+	& .tabbrowser-tab .tab-icon-stack {
+		width: 24px !important;
+		margin-right: 4px !important;
+		.tab-icon-image {
+			padding-left: 4px !important;
+		}
+	}
 }
-.tabbrowser-tab:not([pinned="true"]):hover .tab-icon-stack:not([indicator-replaces-favicon]) {
-	display: none;
 }
