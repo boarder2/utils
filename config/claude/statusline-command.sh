@@ -123,52 +123,44 @@ fi
 # ── rate limit segment ────────────────────────────────────────────────────────
 rate_seg=""
 five_h=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
-seven_d=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
 
-if [ -n "$five_h" ] || [ -n "$seven_d" ]; then
-  rate_parts=()
-  
-  # 5-hour limit with block bar
-  if [ -n "$five_h" ]; then
-    five_h_int=$(printf '%.0f' "$five_h")
-    if [ "$five_h_int" -lt 65 ]; then
-      bar_color="$green"
-    elif [ "$five_h_int" -le 75 ]; then
-      bar_color="$yellow"
-    else
-      bar_color="$red"
-    fi
-    
-    eighths=$(( five_h_int * 80 / 100 ))
-    [ "$eighths" -gt 80 ] && eighths=80
-    full_cells=$(( eighths / 8 ))
-    remainder=$(( eighths % 8 ))
-    empty_cells=$(( 10 - full_cells - (remainder > 0 ? 1 : 0) ))
-    
-    bar=""
-    for (( i=0; i<full_cells; i++ )); do bar="${bar}█"; done
-    if [ "$remainder" -gt 0 ]; then
-      bar="${bar}${blocks[$remainder]}"
-    fi
-    for (( i=0; i<empty_cells; i++ )); do bar="${bar} "; done
-    
-    rate_parts+=("${bar_color}5h: ${bar} ${five_h_int}%${reset}")
+if [ -n "$five_h" ]; then
+  five_h_int=$(printf '%.0f' "$five_h")
+  if [ "$five_h_int" -lt 75 ]; then
+    rate_color="$green"
+  elif [ "$five_h_int" -lt 85 ]; then
+    rate_color="$yellow"
+  else
+    rate_color="$red"
   fi
-  
-  # 7-day limit (percent only)
-  if [ -n "$seven_d" ]; then
-    seven_d_int=$(printf '%.0f' "$seven_d")
-    if [ "$seven_d_int" -lt 65 ]; then
-      rate_color="$green"
-    elif [ "$seven_d_int" -le 75 ]; then
-      rate_color="$yellow"
-    else
-      rate_color="$red"
-    fi
-    rate_parts+=("${rate_color}7d: ${seven_d_int}%${reset}")
+
+  # Build bar graph (same style as context window: 10 cells × 8 sub-steps)
+  rate_eighths=$(( five_h_int * 80 / 100 ))
+  [ "$rate_eighths" -gt 80 ] && rate_eighths=80
+  rate_full=$(( rate_eighths / 8 ))
+  rate_rem=$(( rate_eighths % 8 ))
+  rate_empty=$(( 10 - rate_full - (rate_rem > 0 ? 1 : 0) ))
+
+  rate_bar=""
+  for (( i=0; i<rate_full; i++ )); do rate_bar="${rate_bar}█"; done
+  if [ "$rate_rem" -gt 0 ]; then
+    rate_bar="${rate_bar}${blocks[$rate_rem]}"
   fi
-  
-  rate_seg="${dim}⚡${reset} $(IFS=' '; echo "${rate_parts[*]}")"
+  for (( i=0; i<rate_empty; i++ )); do rate_bar="${rate_bar} "; done
+
+  five_h_resets=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+  if [ -n "$five_h_resets" ]; then
+    now=$(date +%s)
+    secs_left=$(( five_h_resets - now ))
+    [ "$secs_left" -lt 0 ] && secs_left=0
+    mins_left=$(( secs_left / 60 ))
+    hrs_left=$(( mins_left / 60 ))
+    mins_rem=$(( mins_left % 60 ))
+    time_left=$(printf "%d:%02d" "$hrs_left" "$mins_rem")
+    rate_seg="${rate_color}⚡${rate_bar} ${time_left}${reset}"
+  else
+    rate_seg="${rate_color}⚡${rate_bar}${reset}"
+  fi
 fi
 
 # ── cost segment ───────────────────────────────────────────────────────────────
