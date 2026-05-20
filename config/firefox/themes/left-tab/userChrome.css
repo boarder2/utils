@@ -17,16 +17,20 @@
 }
 
 #tabbrowser-tabs[orient="vertical"] {
-&[expanded] {
-	& .tabbrowser-tab:not([pinned="true"]):hover .tab-icon-stack:not([indicator-replaces-favicon]) {
-		display: none;
-	}
-	& .tabbrowser-tab .tab-icon-stack {
-		width: 24px !important;
-		margin-right: 4px !important;
-		.tab-icon-image {
-			padding-left: 4px !important;
+	&[expanded] {
+		& .tabbrowser-tab:not([pinned="true"]):hover .tab-icon-stack:not([indicator-replaces-favicon]) {
+			display: none;
+		}
+		& .tabbrowser-tab .tab-icon-stack {
+			width: 24px !important;
+			margin-right: 4px !important;
+			.tab-icon-image {
+				padding-left: 4px !important;
+			}
 		}
 	}
 }
+
+.tabbrowser-tab[pinned="true"] .tab-close-button {
+	display: none !important;
 }
