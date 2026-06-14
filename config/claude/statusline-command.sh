@@ -35,9 +35,11 @@ if [ -n "$model" ]; then
     *Haiku*)  model_color="$green"  ;;
     *Sonnet*) model_color="$blue"   ;;
     *Opus*)   model_color="$orange" ;;
+    *Fable*)  model_color="$red"    ;;
     *)        model_color="$reset"  ;;
   esac
-  model_seg="${model_color}${icon_brain} ${model}${reset}"
+  #model_seg="${model_color}${icon_brain} ${model}${reset}"
+  model_seg="${model_color}${icon_brain}${reset}"
 fi
 
 # ── context gauge segment ──────────────────────────────────────────────────────
@@ -167,18 +169,18 @@ fi
 cost_seg=""
 cost=$(echo "$input" | jq -r '.cost.total_cost_usd // empty')
 if [ -n "$cost" ]; then
-  cost_fmt=$(printf "%.4f" "$cost")
-  cost_seg="${green}${icon_dollar} \$${cost_fmt}${reset}"
+  cost_fmt=$(printf "%.2f" "$cost")
+  cost_seg="${green}${icon_dollar}${cost_fmt}${reset}"
 fi
 
 # ── assemble ───────────────────────────────────────────────────────────────────
 parts=()
 [ -n "$model_seg" ] && parts+=("$model_seg")
 [ -n "$ctx_seg" ]   && parts+=("$ctx_seg")
+[ -n "$rate_seg" ]  && parts+=("$rate_seg")
 #[ -n "$token_seg" ] && parts+=("$token_seg")
 [ -n "$git_seg" ]   && parts+=("$git_seg")
 [ -n "$dir_seg" ]   && parts+=("$dir_seg")
-[ -n "$rate_seg" ]  && parts+=("$rate_seg")
 [ -n "$cost_seg" ]  && parts+=("$cost_seg")
 
 out=""
